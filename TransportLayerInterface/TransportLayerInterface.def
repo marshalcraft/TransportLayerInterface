@@ -1,0 +1,4 @@
+LIBRARY TransportLayerInterface
+
+EXPORTS
+	TransportLayerInterface @1

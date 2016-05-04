@@ -8,6 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TransportLayerInterface.cpp" />
+    <ClCompile Include="IntializeWinSockAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TransportLayerInterface.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\InterThreadCommunication.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="InitializeWinSockAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TransportLayerInterface.def" />

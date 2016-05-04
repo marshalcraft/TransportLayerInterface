@@ -199,9 +199,11 @@
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TlsConnection.h" />
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TlsServerInfo.h" />
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TransportLayerInfo.h" />
+    <ClInclude Include="InitializeWinSockAPI.h" />
     <ClInclude Include="TransportLayerInterface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="IntializeWinSockAPI.cpp" />
     <ClCompile Include="TransportLayerInterface.cpp" />
   </ItemGroup>
   <ItemGroup>

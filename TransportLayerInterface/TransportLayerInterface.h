@@ -6,3 +6,8 @@
 #include "InterThreadCommunication.h"
 
 void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt);
+
+typedef struct WinSockAPI
+{
+
+}WinSockAPI, *PWinSockAPI;

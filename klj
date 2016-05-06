@@ -1,0 +1,141 @@
+[1mdiff --git a/TransportLayerInterface/InitializeWinSockAPI.h b/TransportLayerInterface/InitializeWinSockAPI.h[m
+[1mindex b73a7ae..b6b738d 100644[m
+[1m--- a/TransportLayerInterface/InitializeWinSockAPI.h[m
+[1m+++ b/TransportLayerInterface/InitializeWinSockAPI.h[m
+[36m@@ -1,5 +1,9 @@[m
+ #pragma once[m
+[31m-#include <TlsConnection.h>[m
+[31m-#include <TransportLayerInterface.h>[m
+[32m+[m[32m#include "TransportLayerInterface.h"[m
+ [m
+[31m-void InitializeWinSockAPI(  _Inout_ PWinSockAPI wsAPI );[m
+\ No newline at end of file[m
+[32m+[m[32m#define INITIALIZEWINSOCKAPIHEADER[m
+[32m+[m
+[32m+[m[32m__inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)[m
+[32m+[m[32m{[m
+[32m+[m
+[32m+[m[32m}[m
+[1mdiff --git a/TransportLayerInterface/IntializeWinSockAPI.cpp b/TransportLayerInterface/IntializeWinSockAPI.cpp[m
+[1mdeleted file mode 100644[m
+[1mindex 586d4e9..0000000[m
+[1m--- a/TransportLayerInterface/IntializeWinSockAPI.cpp[m
+[1m+++ /dev/null[m
+[36m@@ -1,6 +0,0 @@[m
+[31m-#include "InitializeWinSockAPI.h"[m
+[31m-[m
+[31m-void InitializeWinSockAPI(_Inout_ PWinSockAPI wsAPI)[m
+[31m-{[m
+[31m-[m
+[31m-}[m
+\ No newline at end of file[m
+[1mdiff --git a/TransportLayerInterface/TlsConnection.h b/TransportLayerInterface/TlsConnection.h[m
+[1mindex c4093e5..f6e782c 100644[m
+[1m--- a/TransportLayerInterface/TlsConnection.h[m
+[1m+++ b/TransportLayerInterface/TlsConnection.h[m
+[36m@@ -3,6 +3,7 @@[m
+ #include "InterThreadCommunication.h"[m
+ #include "TlsServerInfo.h"[m
+ #include "TransportLayerInfo.h"[m
+[32m+[m[32m#include "InterThreadPole.h"[m
+ [m
+ namespace TlsConnection // Each tcp connection shall be a process managed by tls manager.[m
+ {[m
+[36m@@ -45,6 +46,7 @@[m [mnamespace TlsConnection // Each tcp connection shall be a process managed by tls[m
+ [m
+ 		TransportLayerInfo TrnsPrtLyrInf;[m
+ [m
+[32m+[m		[32mInterThreadPole IntrThrdPle;[m
+ [m
+ 	}AuxillaryData, PAuxillaryData; [m
+ 	[m
+[1mdiff --git a/TransportLayerInterface/TransportLayerInterface.cpp b/TransportLayerInterface/TransportLayerInterface.cpp[m
+[1mindex 0984ff8..021f138 100644[m
+[1m--- a/TransportLayerInterface/TransportLayerInterface.cpp[m
+[1m+++ b/TransportLayerInterface/TransportLayerInterface.cpp[m
+[36m@@ -1,6 +1,7 @@[m
+ ﻿#include "TransportLayerInterface.h"[m
+ [m
+[31m-void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt )[m
+[32m+[m[32mDllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt )[m
+ {[m
+[31m-[m
+[32m+[m	[32mPWinSockAPI WindowSockets;[m
+[32m+[m	[32mInitializeWinSockAPI(&WindowSockets);[m
+ }[m
+[1mdiff --git a/TransportLayerInterface/TransportLayerInterface.h b/TransportLayerInterface/TransportLayerInterface.h[m
+[1mindex b8cefee..da29dcd 100644[m
+[1m--- a/TransportLayerInterface/TransportLayerInterface.h[m
+[1m+++ b/TransportLayerInterface/TransportLayerInterface.h[m
+[36m@@ -4,10 +4,44 @@[m
+ #include "TlsServerInfo.h"[m
+ #include "TransportLayerInfo.h"[m
+ #include "InterThreadCommunication.h"[m
+[32m+[m[32m#include "InitializeWinSockAPI.h"[m
+[32m+[m[32m#include "winbase.h"[m
+[32m+[m[32m#include "winsock2.h"[m
+ [m
+[31m-void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt);[m
+[32m+[m[32m#define DllExport __declspec(dllexport)[m
+[32m+[m
+[32m+[m[32mDllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt);[m
+[32m+[m
+[32m+[m[32mtypedef int(*WSASTARTUP)(WORD, LPWSADATA);[m
+[32m+[m[32mtypedef int(*WSACLEANUP)();[m
+[32m+[m[32mtypedef int(*HTONS)(u_short);[m
+[32m+[m[32mtypedef unsigned long(*INET_ADDR)(char*);[m
+[32m+[m[32mtypedef SOCKET(*SOCKETS)(int, int, int);[m
+[32m+[m[32mtypedef int(*CONNECT)(SOCKET, sockaddr*, int);[m
+[32m+[m[32mtypedef int(*RECV)(SOCKET, char*, int, int);[m
+[32m+[m[32mtypedef int(*SEND)(SOCKET, const char*, int, int);[m
+[32m+[m[32mtypedef int(*WSAGETLASTERROR)(void);[m
+ [m
+ typedef struct WinSockAPI[m
+ {[m
+[32m+[m	[32mHINSTANCE hDll;[m
+[32m+[m	[32mBOOL DllHInstanceStatus;[m
+[32m+[m	[32mBOOL WinSockStatus;[m
+[32m+[m	[32mWSASTARTUP WSAStartup;[m
+[32m+[m	[32mWSACLEANUP WSACleanup;[m
+[32m+[m	[32mHTONS htons;[m
+[32m+[m	[32mINET_ADDR inet_addr;[m
+[32m+[m	[32mSOCKETS sockets;[m
+[32m+[m	[32mCONNECT connect;[m
+[32m+[m	[32mRECV recv;[m
+[32m+[m	[32mSEND send;[m
+[32m+[m	[32mWSAGETLASTERROR WSAGetLastError;[m
+[32m+[m[32m}WinSockAPI, *PWinSockAPI;[m
+[32m+[m
+[32m+[m[32m#ifndef INITIALIZEWINSOCKAPIHEADER[m
+[32m+[m[32m#define INITIALIZEWINSOCKAPIHEADER[m
+[32m+[m[32m__inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)[m
+[32m+[m[32m{[m
+ [m
+[31m-}WinSockAPI, *PWinSockAPI;[m
+\ No newline at end of file[m
+[32m+[m[32m}[m
+[32m+[m[32m#endif[m
+[1mdiff --git a/TransportLayerInterface/TransportLayerInterface.vcxproj b/TransportLayerInterface/TransportLayerInterface.vcxproj[m
+[1mindex 48936e5..7cefa99 100644[m
+[1m--- a/TransportLayerInterface/TransportLayerInterface.vcxproj[m
+[1m+++ b/TransportLayerInterface/TransportLayerInterface.vcxproj[m
+[36m@@ -203,7 +203,6 @@[m
+     <ClInclude Include="TransportLayerInterface.h" />[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+[31m-    <ClCompile Include="IntializeWinSockAPI.cpp" />[m
+     <ClCompile Include="TransportLayerInterface.cpp" />[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+[1mdiff --git a/TransportLayerInterface/TransportLayerInterface.vcxproj.filters b/TransportLayerInterface/TransportLayerInterface.vcxproj.filters[m
+[1mindex aa06001..22e1d3b 100644[m
+[1m--- a/TransportLayerInterface/TransportLayerInterface.vcxproj.filters[m
+[1m+++ b/TransportLayerInterface/TransportLayerInterface.vcxproj.filters[m
+[36m@@ -8,7 +8,6 @@[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+     <ClCompile Include="TransportLayerInterface.cpp" />[m
+[31m-    <ClCompile Include="IntializeWinSockAPI.cpp" />[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+     <ClInclude Include="TransportLayerInterface.h" />[m

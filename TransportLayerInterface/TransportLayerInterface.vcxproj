@@ -203,7 +203,6 @@
     <ClInclude Include="TransportLayerInterface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IntializeWinSockAPI.cpp" />
     <ClCompile Include="TransportLayerInterface.cpp" />
   </ItemGroup>
   <ItemGroup>

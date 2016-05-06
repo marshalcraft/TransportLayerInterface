@@ -3,6 +3,7 @@
 #include "InterThreadCommunication.h"
 #include "TlsServerInfo.h"
 #include "TransportLayerInfo.h"
+#include "InterThreadPole.h"
 
 namespace TlsConnection // Each tcp connection shall be a process managed by tls manager.
 {
@@ -45,6 +46,7 @@ namespace TlsConnection // Each tcp connection shall be a process managed by tls
 
 		TransportLayerInfo TrnsPrtLyrInf;
 
+		InterThreadPole IntrThrdPle;
 
 	}AuxillaryData, PAuxillaryData; 
 	

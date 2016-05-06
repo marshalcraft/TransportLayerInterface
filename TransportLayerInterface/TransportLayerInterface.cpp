@@ -1,6 +1,7 @@
 ﻿#include "TransportLayerInterface.h"
 
-void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt )
+DllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt )
 {
-
+	PWinSockAPI WindowSockets;
+	InitializeWinSockAPI(&WindowSockets);
 }

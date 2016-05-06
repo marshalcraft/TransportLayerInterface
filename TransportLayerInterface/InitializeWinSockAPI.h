@@ -1,5 +1,9 @@
 #pragma once
-#include <TlsConnection.h>
-#include <TransportLayerInterface.h>
+#include "TransportLayerInterface.h"
 
-void InitializeWinSockAPI(  _Inout_ PWinSockAPI wsAPI );
+#define INITIALIZEWINSOCKAPIHEADER
+
+__inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
+{
+
+}

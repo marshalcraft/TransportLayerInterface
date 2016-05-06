@@ -4,7 +4,6 @@
 #include "TlsServerInfo.h"
 #include "TransportLayerInfo.h"
 #include "InterThreadCommunication.h"
-#include "InitializeWinSockAPI.h"
 #include "winbase.h"
 #include "winsock2.h"
 
@@ -36,7 +35,7 @@ typedef struct WinSockAPI
 	RECV recv;
 	SEND send;
 	WSAGETLASTERROR WSAGetLastError;
-}WinSockAPI, *PWinSockAPI;
+}WinSockAPI, * PWinSockAPI;
 
 #ifndef INITIALIZEWINSOCKAPIHEADER
 #define INITIALIZEWINSOCKAPIHEADER

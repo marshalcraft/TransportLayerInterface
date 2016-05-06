@@ -7,12 +7,12 @@
 __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 {
 	//******************************** Initialize WinSock2 Dll and functions ************************
-
+	winSockAPI->WinSockAPIReady = true;
 	winSockAPI->hDll = LoadPackagedLibrary(TEXT("ws2_32.dll"), 0x00);
 
 	if (winSockAPI->hDll == NULL)
 	{
-		//Console::WriteLine("Failed to load Windows Sockets Dll. The Dll is either missing or incorrect.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -23,7 +23,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->WSAStartup = (WSASTARTUP)GetProcAddress(winSockAPI->hDll, "WSAStartup");
 	if (winSockAPI->WSAStartup == NULL)
 	{
-		//Console::WriteLine("Failed to load Windows Socket WSASTartup.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -33,7 +33,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->WSACleanup = (WSACLEANUP)GetProcAddress(winSockAPI->hDll, "WSACleanup");
 	if (winSockAPI->WSACleanup == NULL)
 	{
-		//Console::WriteLine("Failed to load Widnows Socket WSACleanup.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -44,7 +44,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->htons = (HTONS)GetProcAddress(winSockAPI->hDll, "htons");
 	if (winSockAPI->htons == NULL)
 	{
-		//Console::WriteLine("Failed to load htons port converter");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -54,7 +54,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->inet_addr = (INET_ADDR)GetProcAddress(winSockAPI->hDll, "inet_addr");
 	if (winSockAPI->inet_addr == NULL)
 	{
-		//Console::WriteLine("Failed to load idef_addr address converter.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -65,7 +65,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->sockets = (SOCKETS)GetProcAddress(winSockAPI->hDll, "socket");
 	if (winSockAPI->sockets == NULL)
 	{
-		//Console::WriteLine("There was a problem with socket binding");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -75,7 +75,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->connect = (CONNECT)GetProcAddress(winSockAPI->hDll, "connect");
 	if (winSockAPI->connect == NULL)
 	{
-		//Console::WriteLine("Unable to load connection API from the dll.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -85,7 +85,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->send = (SEND)GetProcAddress(winSockAPI->hDll, "send");
 	if (winSockAPI->send == NULL)
 	{
-		//Console::WriteLine("Unable to load send API from the dll.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -96,7 +96,7 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->recv = (RECV)GetProcAddress(winSockAPI->hDll, "recv");
 	if (winSockAPI->recv == NULL)
 	{
-		//Console::WriteLine("Unable to load recv API from the dll.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
@@ -106,13 +106,12 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	winSockAPI->WSAGetLastError = (WSAGETLASTERROR)GetProcAddress(winSockAPI->hDll, "WSAGetLastError");
 	if (winSockAPI->WSAGetLastError == NULL)
 	{
-		//Console::WriteLine("There was a problem loading WSAGetLastError from the dll.");
+		winSockAPI->WinSockAPIReady = false;
 	}
 	else
 	{
 		//Console::WriteLine("Successfully loaded WSAGetLastError API.");
 	}
 	//Finished Dll Initialization ****************************************************
-
 }
 #endif

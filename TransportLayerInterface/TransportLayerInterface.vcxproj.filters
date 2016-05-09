@@ -7,10 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TransportLayerInterface.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TransportLayerInterface.h" />
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TlsConnection.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -24,8 +20,13 @@
       <Filter>Resource Files</Filter>
     </ClInclude>
     <ClInclude Include="InitializeWinSockAPI.h" />
+    <ClInclude Include="InitializeSocket.h" />
+    <ClInclude Include="TransportLayerInterface.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TransportLayerInterface.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TransportLayerInterface.cpp" />
   </ItemGroup>
 </Project>

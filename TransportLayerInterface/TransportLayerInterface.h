@@ -36,7 +36,14 @@ typedef struct WinSockAPI
 	SEND send;
 	WSAGETLASTERROR WSAGetLastError;
 
+	int WinSockInitError;
+	WSADATA WSAData;
+	SOCKET Socket;
+	BYTE ConnectionTimeOut;
+	BYTE ServerInfReady;
+
 	bool WinSockAPIReady;
+	bool ConnectionEstablished;
 }WinSockAPI, * PWinSockAPI;
 
 #ifndef INITIALIZEWINSOCKAPIHEADER
@@ -44,6 +51,7 @@ typedef struct WinSockAPI
 __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 {
 	//******************************** Initialize WinSock2 Dll and functions ************************
+	winSockAPI->ConnectionEstablished = false;
 	winSockAPI->WinSockAPIReady = true;
 	winSockAPI->hDll = LoadPackagedLibrary(TEXT("ws2_32.dll"), 0x00);
 
@@ -151,4 +159,8 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	}
 	//Finished Dll Initialization ****************************************************
 }
+#endif
+#ifndef INITIALIZESOCKETHEADER
+#define INTIIALIZESOCKETHEADER
+__inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addressFamilySpec, _In_ int typeSpec, _In_ int protocol);
 #endif

@@ -7,6 +7,7 @@
 __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 {
 	//******************************** Initialize WinSock2 Dll and functions ************************
+	winSockAPI->ConnectionEstablished = false;
 	winSockAPI->WinSockAPIReady = true;
 	winSockAPI->hDll = LoadPackagedLibrary(TEXT("ws2_32.dll"), 0x00);
 

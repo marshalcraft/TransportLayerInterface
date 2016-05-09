@@ -44,6 +44,7 @@ typedef struct WinSockAPI
 
 	bool WinSockAPIReady;
 	bool ConnectionEstablished;
+	bool TerminateSocket;
 }WinSockAPI, * PWinSockAPI;
 
 #ifndef INITIALIZEWINSOCKAPIHEADER

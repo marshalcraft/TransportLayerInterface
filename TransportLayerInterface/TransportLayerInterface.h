@@ -165,3 +165,15 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 #define INTIIALIZESOCKETHEADER
 __inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addressFamilySpec, _In_ int typeSpec, _In_ int protocol);
 #endif
+#ifndef SERVERINFOREADYHOLDHEADER
+#define SERVERINFOREADYHOLDHEADER
+__inline void ServerInfoReadyHold(_In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt, _In_ WinSockAPI WindowSockets)
+{
+	do
+	{
+		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
+		pAuxConSt->UnExactData.ServInf.InfoReady = WindowSockets.ServerInfReady;
+		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
+	} while (WindowSockets.ServerInfReady != 0x01);
+}
+#endif

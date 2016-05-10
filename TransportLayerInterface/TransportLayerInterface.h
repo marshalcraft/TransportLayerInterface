@@ -43,6 +43,7 @@ typedef struct WinSockAPI
 	BYTE ServerInfReady;
 
 	bool WinSockAPIReady;
+	bool SocketReady;
 	bool ConnectionEstablished;
 	bool TerminateSocket;
 }WinSockAPI, * PWinSockAPI;
@@ -163,7 +164,15 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 #endif
 #ifndef INITIALIZESOCKETHEADER
 #define INTIIALIZESOCKETHEADER
-__inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addressFamilySpec, _In_ int typeSpec, _In_ int protocol);
+__inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addressFamilySpec, _In_ int typeSpec, _In_ int protocol)
+{
+	WindowSockets->Socket = WindowSockets->sockets(addressFamilySpec, typeSpec, protocol);
+	if (WindowSockets->Socket == INVALID_SOCKET)
+	{
+		//Handle Socket initialization error.
+	}
+	WindowSockets->SocketReady = true;
+}
 #endif
 #ifndef SERVERINFOREADYHOLDHEADER
 #define SERVERINFOREADYHOLDHEADER

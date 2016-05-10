@@ -22,6 +22,7 @@
     <ClInclude Include="InitializeWinSockAPI.h" />
     <ClInclude Include="InitializeSocket.h" />
     <ClInclude Include="TransportLayerInterface.h" />
+    <ClInclude Include="ServerInfoReadyHold.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TransportLayerInterface.def" />

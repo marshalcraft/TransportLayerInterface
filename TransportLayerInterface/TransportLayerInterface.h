@@ -197,3 +197,19 @@ __inline void ServerInfoReadyHold(_In_ TlsConnection::PAuxillaryConnectionStateD
 	} while (WindowSockets.ServerInfReady != 0x01);
 }
 #endif
+#ifndef SENDDATAHEADER
+#define SENDDATAHEADER
+
+__inline void SendData(_In_ PWinSockAPI WindowSockets, _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt)
+{
+	WindowSockets->ConnectionStatusOrError = WindowSockets->connect(WindowSockets->Socket, (sockaddr *)&WindowSockets->SockAddr_In, sizeof(WindowSockets->SockAddr_In));
+	if (WindowSockets->ConnectionStatusOrError != 0)
+	{
+		WindowSockets->ConnectionStatusOrError = WindowSockets->WSAGetLastError();
+		if (WindowSockets->ConnectionStatusOrError != WSAEISCONN)
+		{
+			//handle tcp connection error
+		}
+	}
+}
+#endif

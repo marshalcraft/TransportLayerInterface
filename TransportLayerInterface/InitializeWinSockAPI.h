@@ -51,9 +51,9 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	{
 		//Console::WriteLine("Windows Socket htons port converter loaded successfully.");
 	}
-	//************************** Load inet_addr() ************************************
-	winSockAPI->inet_addr = (INET_ADDR)GetProcAddress(winSockAPI->hDll, "inet_addr");
-	if (winSockAPI->inet_addr == NULL)
+	//************************** Load inet_pton() ************************************
+	winSockAPI->inetPton = (INETPTON)GetProcAddress(winSockAPI->hDll, "inetPton");
+	if (winSockAPI->inetPton == NULL)
 	{
 		winSockAPI->WinSockAPIReady = false;
 	}

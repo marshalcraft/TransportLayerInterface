@@ -8,7 +8,7 @@ DllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnection
 	WindowSockets.ServerInfReady = 0x00;
 
 	InitializeWinSockAPI(&WindowSockets);
-
+	//pAuxConSt->UnExactData
 	if (WindowSockets.WinSockAPIReady == false)
 	{
 		// Tell main thread there is an error loading transport interface, file missing or incorrect version.
@@ -24,8 +24,10 @@ DllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnection
 		ServerInfoReadyHold(pAuxConSt, WindowSockets);
 		if (WindowSockets.SocketReady == false)
 		{
-			InitializeSocket( &WindowSockets, AF_INET, SOCK_STREAM, IPPROTO_TCP);//Generalize and use serverinfo to use other kinds of sockets.
+			InitializeSocket( &WindowSockets, AF_INET, SOCK_STREAM, IPPROTO_TCP, pAuxConSt);//Generalize and use serverinfo to use other kinds of sockets.
 		}
+		//SendData();
+		//ReceiveData();
 
 	}
 	while (WindowSockets.TerminateSocket == false);

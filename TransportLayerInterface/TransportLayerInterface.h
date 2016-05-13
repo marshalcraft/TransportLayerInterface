@@ -6,6 +6,7 @@
 #include "InterThreadCommunication.h"
 #include "winbase.h"
 #include "winsock2.h"
+#include "Inaddr.h"
 
 #define DllExport __declspec(dllexport)
 
@@ -14,7 +15,7 @@ DllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnection
 typedef int(*WSASTARTUP)(WORD, LPWSADATA);
 typedef int(*WSACLEANUP)();
 typedef int(*HTONS)(u_short);
-typedef unsigned long(*INET_ADDR)(char*);
+typedef int(*INETPTON)( INT, PCTSTR, PVOID);
 typedef SOCKET(*SOCKETS)(int, int, int);
 typedef int(*CONNECT)(SOCKET, sockaddr*, int);
 typedef int(*RECV)(SOCKET, char*, int, int);
@@ -29,7 +30,7 @@ typedef struct WinSockAPI
 	WSASTARTUP WSAStartup;
 	WSACLEANUP WSACleanup;
 	HTONS htons;
-	INET_ADDR inet_addr;
+	INETPTON inetPton;
 	SOCKETS sockets;
 	CONNECT connect;
 	RECV recv;
@@ -37,8 +38,10 @@ typedef struct WinSockAPI
 	WSAGETLASTERROR WSAGetLastError;
 
 	int WinSockInitError;
+	int ConnectionStatusOrError;
 	WSADATA WSAData;
 	SOCKET Socket;
+	SOCKADDR_IN SockAddr_In;
 	BYTE ConnectionTimeOut;
 	BYTE ServerInfReady;
 
@@ -97,9 +100,9 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 	{
 		//Console::WriteLine("Windows Socket htons port converter loaded successfully.");
 	}
-	//************************** Load inet_addr() ************************************
-	winSockAPI->inet_addr = (INET_ADDR)GetProcAddress(winSockAPI->hDll, "inet_addr");
-	if (winSockAPI->inet_addr == NULL)
+	//************************** Load inet_pton() ************************************
+	winSockAPI->inetPton = (INETPTON)GetProcAddress(winSockAPI->hDll, "inetPton");
+	if (winSockAPI->inetPton == NULL)
 	{
 		winSockAPI->WinSockAPIReady = false;
 	}
@@ -164,8 +167,16 @@ __inline void InitializeWinSockAPI(_Inout_ PWinSockAPI winSockAPI)
 #endif
 #ifndef INITIALIZESOCKETHEADER
 #define INTIIALIZESOCKETHEADER
-__inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addressFamilySpec, _In_ int typeSpec, _In_ int protocol)
+__inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addressFamilySpec, _In_ int typeSpec, _In_ int protocol, _In_ TlsConnection::PAuxillaryConnectionStateData pAuxConSt)
 {
+	//**** write method which convertes BYTE * to ip address string like "222.222.222.222"
+	if (WindowSockets->inetPton(AF_INET, (PCTSTR)pAuxConSt->UnExactData.ServInf.IpAddress15Bytes, &pAuxConSt->UnExactData.ServInf.WinSockFormattedIPV4Address) != 1)
+	{
+		//handle address conversion error
+	}
+	WindowSockets->SockAddr_In.sin_addr.s_addr = pAuxConSt->UnExactData.ServInf.WinSockFormattedIPV4Address.S_un.S_addr;
+	WindowSockets->SockAddr_In.sin_family = AF_INET;
+	WindowSockets->SockAddr_In.sin_port = htons((0xFF * pAuxConSt->UnExactData.ServInf.Port[1]) + pAuxConSt->UnExactData.ServInf.Port[0]);
 	WindowSockets->Socket = WindowSockets->sockets(addressFamilySpec, typeSpec, protocol);
 	if (WindowSockets->Socket == INVALID_SOCKET)
 	{
@@ -180,9 +191,9 @@ __inline void ServerInfoReadyHold(_In_ TlsConnection::PAuxillaryConnectionStateD
 {
 	do
 	{
-		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
+		/*EnterCriticalSection(&pAuxConSt->UnExactData.TlsServerInfoLockObj);
 		pAuxConSt->UnExactData.ServInf.InfoReady = WindowSockets.ServerInfReady;
-		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
+		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);*/
 	} while (WindowSockets.ServerInfReady != 0x01);
 }
 #endif

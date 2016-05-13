@@ -7,12 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TlsConnection.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TlsServerInfo.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TransportLayerInfo.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -23,6 +17,13 @@
     <ClInclude Include="InitializeSocket.h" />
     <ClInclude Include="TransportLayerInterface.h" />
     <ClInclude Include="ServerInfoReadyHold.h" />
+    <ClInclude Include="SendData.h" />
+    <ClInclude Include="TlsServerInfo.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TlsConnection.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="TransportLayerInterface.def" />

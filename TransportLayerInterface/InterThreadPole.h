@@ -1,24 +1,25 @@
 #pragma once
 typedef struct TransportRecvReady
 {
-	bool HandShakeHandlerRead;
-	bool ChangeCipherSuitThreadRead;
-	bool ApplicationLayerThreadRead;
+	CRITICAL_SECTION TransportRecvCS;
 	BYTE * DataBuffer;
 	BYTE * DataBufferSize;
 }TransportRecvReady, *PTransportRecvReady;
 
 typedef struct TransportSendReady
 {
-	bool HandShakeHandlerSend;
+	CRITICAL_SECTION HandShakeHandlerSend;
+	bool HandShakeHandlerNewData;
 	BYTE * HandShakeHandlerSendData;
-	BYTE * HandShakeHandlerSendDataSize;
-	bool ChangeCipherSuitThreadSend;
+	BYTE HandShakeHandlerSendDataSize;
+	CRITICAL_SECTION ChangeCipherSuitThreadSend;
+	bool ChangeCipherSuitNewData;
 	BYTE * ChangeCipherSuitThreadSendData;
-	BYTE * ChangeCipherSuitThreadSendDataSize;
-	bool ApplicationLayerThreadSend;
+	BYTE ChangeCipherSuitThreadSendDataSize;
+	CRITICAL_SECTION ApplicationLayerThreadSend;
+	bool ApplicationLayerNewData;
 	BYTE * ApplicationLayerThreadSendData;
-	BYTE * ApplicationLayerThreadSendDataSize;
+	BYTE ApplicationLayerThreadSendDataSize;
 }TransportSendReady, *PTransportSendReady;
 typedef struct InterThreadPole
 {

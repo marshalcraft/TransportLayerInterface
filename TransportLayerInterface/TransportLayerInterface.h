@@ -191,9 +191,9 @@ __inline void ServerInfoReadyHold(_In_ TlsConnection::PAuxillaryConnectionStateD
 {
 	do
 	{
-		/*EnterCriticalSection(&pAuxConSt->UnExactData.TlsServerInfoLockObj);
+		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
 		pAuxConSt->UnExactData.ServInf.InfoReady = WindowSockets.ServerInfReady;
-		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);*/
+		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
 	} while (WindowSockets.ServerInfReady != 0x01);
 }
 #endif
@@ -211,5 +211,29 @@ __inline void SendData(_In_ PWinSockAPI WindowSockets, _In_ TlsConnection::PAuxi
 			//handle tcp connection error
 		}
 	}
+
+	EnterCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSend);
+	if (pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerNewData == true)
+	{
+		WindowSockets->send(WindowSockets->Socket, (const char *) pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSendData, pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSendDataSize, 0);
+		pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerNewData = false;
+	}
+	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSend);
+
+	EnterCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSend);
+	if (pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitNewData == true)
+	{
+		WindowSockets->send(WindowSockets->Socket, (const char *)pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSendData, pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSendDataSize, 0);
+		pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerNewData = false;
+	}
+	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSend);
+
+	EnterCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerThreadSend);
+	if (pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerNewData == true)
+	{
+		WindowSockets->send(WindowSockets->Socket, (const char *)pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerThreadSendData, pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSendDataSize, 0);
+		pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerNewData = false;
+	}
+	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSend);
 }
 #endif

@@ -9,7 +9,7 @@ __inline void ServerInfoReadyHold(_In_ TlsConnection::PAuxillaryConnectionStateD
 	{
 		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
 		pAuxConSt->UnExactData.ServInf.InfoReady = WindowSockets.ServerInfReady;
-		EnterCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
+		LeaveCriticalSection(&pAuxConSt->UnExactData.ServInf.TlsServerInfoLockObj);
 	}
 	while (WindowSockets.ServerInfReady != 0x01);
 }

@@ -30,7 +30,7 @@ __inline void SendData(_In_ PWinSockAPI WindowSockets, _In_ TlsConnection::PAuxi
 		WindowSockets->send(WindowSockets->Socket, (const char *)pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSendData, pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSendDataSize, 0);
 		pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerNewData = false;
 	}
-	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSend);
+	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSend);
 
 	EnterCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerThreadSend);
 	if (pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerNewData == true)
@@ -38,6 +38,6 @@ __inline void SendData(_In_ PWinSockAPI WindowSockets, _In_ TlsConnection::PAuxi
 		WindowSockets->send(WindowSockets->Socket, (const char *)pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerThreadSendData, pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ChangeCipherSuitThreadSendDataSize, 0);
 		pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerNewData = false;
 	}
-	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.HandShakeHandlerSend);
+	LeaveCriticalSection(&pAuxConSt->UnExactData.IntrThrdPle.SndRdy.ApplicationLayerThreadSend);
 }
 #endif

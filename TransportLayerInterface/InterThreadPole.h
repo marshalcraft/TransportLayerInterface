@@ -21,6 +21,8 @@ typedef struct TransportSendReady
 	BYTE * ApplicationLayerThreadSendData;
 	BYTE ApplicationLayerThreadSendDataSize;
 }TransportSendReady, *PTransportSendReady;
+
+
 typedef struct InterThreadPole
 {
 	TransportRecvReady RecvRdy;

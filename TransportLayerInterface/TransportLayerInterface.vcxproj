@@ -199,6 +199,7 @@
     <ClInclude Include="..\..\coinbase_exchange_client\coinbase_exchange_client\TransportLayerInfo.h" />
     <ClInclude Include="InitializeSocket.h" />
     <ClInclude Include="InitializeWinSockAPI.h" />
+    <ClInclude Include="ReceiveData.h" />
     <ClInclude Include="SendData.h" />
     <ClInclude Include="ServerInfoReadyHold.h" />
     <ClInclude Include="TlsConnection.h" />

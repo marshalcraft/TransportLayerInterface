@@ -27,7 +27,7 @@ DllExport void TransportLayerInterface( _In_ TlsConnection::PAuxillaryConnection
 			InitializeSocket( &WindowSockets, AF_INET, SOCK_STREAM, IPPROTO_TCP, pAuxConSt);//Generalize and use serverinfo to use other kinds of sockets.
 		}
 		SendData(&WindowSockets, pAuxConSt);
-		//ReceiveData();
+		ReceiveData(&WindowSockets, pAuxConSt);
 
 	}
 	while (WindowSockets.TerminateSocket == false);

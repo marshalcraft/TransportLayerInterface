@@ -20,6 +20,10 @@ __inline void InitializeSocket(_Inout_ PWinSockAPI WindowSockets, _In_ int addre
 	{
 		//Handle Socket initialization error.
 	}
+
+	// For select() fd_set initialization for single socket.
+	FD_ZERO(WindowSockets->PReadFds);
+	FD_SET(WindowSockets->Socket, WindowSockets->PReadFds);
 	WindowSockets->SocketReady = true;
 }
 #endif
